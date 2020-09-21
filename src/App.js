@@ -16,14 +16,14 @@ function App() {
     e.preventDefault();
 
     fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?q=${location}&APPID=4db2f54d49b2eef22c540e6899c78248&units=metric`
+      `http://api.openweathermap.org/data/2.5/forecast?q=${location}&APPID=${process.env.REACT_APP_WEATHER_API_KEY}`
     )
       .then((res) => res.json())
       .then((data) => {
         const list = data.list;
         const dates = [];
         const temps = [];
-
+        console.log(data.list);
         for (let i = 0; i < list.length; i++) {
           dates.push(list[i].dt_txt);
           temps.push(list[i].main.temp);
@@ -32,7 +32,10 @@ function App() {
         setData(data);
         setDates(dates);
         setTemps(temps);
-        setSelected({ date: "", temp: null });
+        setSelected({
+          date: "",
+          temp: null,
+        });
       })
       .catch((err) => console.log(err));
   };
@@ -50,30 +53,31 @@ function App() {
   if (data.list) currentTemp = data.list[0].main.temp;
   return (
     <div className="App">
-      <h1>Weather</h1>
+      <h1> Weather </h1>{" "}
       <form onSubmit={fetchData}>
         <label>
-          I want to know the weather for
+          I want to know the weather for{" "}
           <input
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder={"City, Country"}
-          />
-        </label>
+          />{" "}
+        </label>{" "}
       </form>
-
       {data.list ? (
         <div className="wrapper">
           <p className="temp-wrapper">
             <span className="temp">
-              {selected.temp ? selected.temp : currentTemp}
-            </span>
-            <span className="temp-symbol">℃</span>
+              {" "}
+              {selected.temp ? selected.temp : currentTemp}{" "}
+            </span>{" "}
+            <span className="temp-symbol"> ℃ </span>{" "}
             <span className="temp-date">
-              {selected.temp ? selected.date : ""}
-            </span>
-          </p>
+              {" "}
+              {selected.temp ? selected.date : ""}{" "}
+            </span>{" "}
+          </p>{" "}
           <Plot
             onClick={onPlotClick}
             data={[
@@ -83,9 +87,9 @@ function App() {
                 type: "scatter",
               },
             ]}
-          />
+          />{" "}
         </div>
-      ) : null}
+      ) : null}{" "}
     </div>
   );
 }
